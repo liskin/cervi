@@ -46,7 +46,7 @@ namespace std {
 	{{GDK_Caps_Lock,0,0}, {GDK_Shift_L,0,0}},
 	{{'/','?',0}, {GDK_Shift_R,0,0}},
 	{{GDK_KP_1,0,0}, {GDK_KP_2,0,0}},
-	{{0,0,0}, {0,0,0}},
+	{{GDK_KP_Add,0,0}, {GDK_KP_Subtract,0,0}},
 	{{0,0,0}, {0,0,0}},
 	{{0,0,0}, {0,0,0}}
     };
