@@ -77,13 +77,15 @@ namespace std {
 			    break;
 			}
 		}
-		cervi[i] = new Cerv(this,x,y,angle,70 + (rand() % 50),10,
+		cervi[i] = new Cerv(this,x,y,angle,
+			70 + (rand() % 50) - 5 * (n_cervi - 2),10,
 			colors[i],i);
 	    } else if (par.placing == 1) {
 		cervi[i] = new Cerv(this,field.width / 2,field.height / 2,
 			-M_PI_2 + i*2*M_PI/n_cervi +//position cerv's regularly
 			2*M_PI*((rand()%20)-10)/n_cervi/100, // with variation
-			70 + (rand() % 50),10,colors[i],i);//variate speed also
+			70 + (rand() % 50) - 5 * (n_cervi - 2),10,
+			colors[i],i);//variate speed also
 		cervi[i]->_cspeed = cervi[i]->_speed;
 		cervi[i]->update(75*(n_cervi+2)/2); // keep similar distance
 		// between cerv's for any number of cerv's
