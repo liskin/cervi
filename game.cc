@@ -41,12 +41,12 @@ namespace std {
     struct {
 	unsigned int left[3], right[3];
     } controls[8] = {
-	{{GDK_Left,0,0}, {GDK_Right,0,0}},
 	{{'N',0,0}, {'M',0,0}},
-	{{GDK_Caps_Lock,0,0}, {GDK_Shift_L,0,0}},
-	{{'/','?',0}, {GDK_Shift_R,0,0}},
+	{{'1','!',0}, {'2','@',0}},
+	{{'[','{',0}, {']','}',0}},
 	{{GDK_KP_1,0,0}, {GDK_KP_2,0,0}},
 	{{GDK_KP_Add,0,0}, {GDK_KP_Subtract,0,0}},
+	{{'S',0,0}, {'D',0,0}},
 	{{0,0,0}, {0,0,0}},
 	{{0,0,0}, {0,0,0}}
     };
@@ -203,6 +203,7 @@ namespace std {
 	    for (int i=0; i<n_cervi; i++)
 		if (!cervi[i]->_collision) {
 		    cervi[i]->_speed += (ncollision - _ncollided) * 20;
+		    cervi[i]->_rotspeed -= (ncollision - _ncollided);
 		}
 	    m.speed = speed();
 	}
