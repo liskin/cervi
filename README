@@ -1,0 +1,202 @@
+
+  GTK Cervi, What is it?
+ ========================
+
+ GTK Cervi is clone of Cervi.  I'm not really sure if Cervi is original name
+ of it but I know this game as Cervi so it will be named GTK Cervi.  It is
+ a multiplayer game (for 2-8 players) where players drive their worms.  Worms
+ are getting longer and players mustn't collide with any worm.  Winner is the
+ last surviving worm.  For more information see `Gameplay internals' section.
+
+
+  Differences (additions) to Cervi
+ ==================================
+
+ Here is a list of actual known differences and additions to Cervi's look
+ and/or gameplay:
+
+ * Some little differences in gameplay - these won't be fixed because I like
+   this gameplay.
+ * Our cerv's are antialiased.
+ * We have different field size, and it can be changed.
+ * Different controls.
+ * More players.
+ * Different scoring.
+ * Hatrick and extra hatrick bonuses.
+
+
+  Controls
+ ==========
+
+ Controls for 5th - 8th player aren't yet defined and there is no way to set
+ them without altering source code (game.cc line 38).  We will try to define
+ them so game will be playable in good number of players on desktop and on
+ notebook (on most notebooks you can connect 2nd keyboard and then it will
+ be very playable).  Here is a list of controls for 1st - 4th player:
+
+     Turn left | Turn right
+   ------------+-------------
+ 1. left arrow | right arrow
+ 2.        'V' | 'B'
+ 3. left shift | 'Z' ('Y' on qwertz keyboard)
+ 4.    ',' '<' | '.' '>'
+
+
+  Compiling and installing
+ ==========================
+
+ You will need these:
+  * GNU C++ compiler (gcc & g++) (I don't know version, maybe 2.9 at least)
+  * GNU C library (glibc) (I don't know version, 2.2.5 at least recommended)
+  * GNU Standard C++ library (libstdc++) v2 (v3 is better of course) (that one
+    shipped with your GNU C++ compiler)
+  * GIMP Toolkit (GTK+) and GIMP Drawing Kit (I don't know version, maybe 1.2
+    at least)
+  * ESound (I don't know version)
+  * Timidity (I don't know version)
+
+ If you want to compile it, install it and use it, do:
+  $ su -
+  # make install
+  or (if you want to build as non-privileged user and install as root)
+  $ make
+  $ su -
+  # make install
+  (they are the same)
+
+  (yes, there is NO configure script, ask me why)
+
+ If you want to compile it faster (for developing, where you needn't
+ optimalisation), do:
+  $ make
+
+ If you want to compile with debugging symbols, do:
+  $ make DEBUG		# (or make DEBUG=yes)
+ or change the line `DEBUG=no' in Makefile.
+
+ If you want to change install paths and/or some other things, they are at
+ beggining of Makefile.
+
+ If there are any compiling and/or installing problems, write to
+ cervi@tomi.nomi.cz and post your make output, your `uname -mrspv`, version of
+ needed things (as listed above) and your distribution name (for Linux, etc.).
+ Maybe I won't be able to tell you simple solution for that problem so please
+ try to fix it by hand and post me what to do.
+
+
+  Development
+ =============
+
+ If you want to help me with development...
+  ...actively, you have to mail me to cervi@tomi.nomi.cz, and keep my coding
+     style please.
+  ...passively, you have to send comments and/or patches to
+     cervi@tomi.nomi.cz, and you do not need to keep my coding style if you
+     have some reason for it because I will go through your patches and fix it
+     to fit my likes.
+
+
+  Gameplay internals
+ ====================
+
+ If you want to know exact rules for GTK Cervi, read this and for more details
+ look in sources (mainly game.cc).  Also if you want to program your own Cervi
+ clone and you don't know some things or you have some problems which you
+ cannot solve, look here.
+
+ At first, I will describe starting positions.  You can choose between `Look
+ at center' and `Look from center':
+
+ `Look at center':
+  This placing is taken from original Cervi and slightly modified.  We choose
+  random angle in range <0; 2*M_PI).  This must differ from any other at least
+  0.4 (M_PI / 8).  Then we choose random radius, so cerv will start in the
+  second 1/3 in distance from edge to center.  Then we compute x and y
+  position of cerv, so they start going towards center.  Distance between any
+  two cerv's must be longer than 50.
+
+ `Look from center':
+  All cerv's are placed directly to the center.  Their angles are set
+  regularly with some variation so they will look like a star.  Then we move
+  them a little forward, so there will be a little circle left (in the middle
+  of field).  How far they are moved is computed from a number of cerv's so
+  there are similar distances between them.
+
+ At next, I will describe how speed works and what speed we choose at
+ beginning.  Speed specifies, how many units (pixels, but precision is much
+ better) we travel in one second.  Rotation speed specifies a radius (not
+ absolute) of the smallest circle which can cerv draw.  Rotation speed 150
+ specifies, that we add speed to angle in one second.  Average speed is 100
+ and average rotation speed is 10 (rotation speed isn't random).  Starting
+ speed is a random number in range <70; 120).  But real starting speed is
+ 1 and it will grow to that speed in one second.
+
+ What happens then?  Every 10 (at least) milliseconds we update cerv's and
+ display.  Cerv updating is done for each millisecond (so 8 player game will
+ do 8000 updates per second, which is many (many FP ops - sins, cosins, etc.)
+ and it still eats only 0.5% CPU on Celeron 233).  And what happens in cerv
+ updating?  We update position (each millisecond) and if it (rounded) changes,
+ we do collision checking, set bits in bitfield (for collision checking) and
+ we draw a little circle there.
+
+ You can ask why update every millisecond.  Because we don't exactly know how
+ often we should update to have nice lines.  But surely not less than one
+ millisecond and surely less than 10 milliseconds.  There was one bug.  We
+ checked for collisions after cycle of updates (each with 1 millisecond tick)
+ and sometimes cerv went through another.  I solved it this way - collision
+ checking was done for every update - every 1 millisecond.  But what I got was
+ another, hard to find, bug.  I will explain it after collision checking
+ explanation.
+
+ Now (after fixing that bug) we check for collision only when rounded position
+ changes.  Checking is easy.  In bitfield, cerv's are drawn as in fig.1.  Then
+ we check three pixels as in fig.2. Of course not always these three pixels
+ but always the three pixels which are in the same 1/4 of full angle as cerv's
+ angle.  So three pixels in fig.2 are checked for example for angle M_PI_4
+ (= 45 degrees) (0 is to the right).  Of course cerv collides also on edges.
+
+ +---+---+---+---+---+    +---+---+---+---+---+    +---+---+---+---+---+
+ |   |   |   |   |   |    |   |   |   |   |   |    |   |   |   |   |   |
+ +---+---+---+---+---+    +---+---+---+---+---+    +---+---+---+---+---+
+ |   |   |###|   |   |    |   |   |###|   |   |    |   |   |###|   |   |
+ +---+---+---+---+---+    +---+---+---+---+---+    +---+---+---+---+---+
+ |   |###|###|###|   |    |   |###|###|###|???|    | ? |###|###|###|###|
+ +---+---+---+---+---+    +---+---+---+---+---+    +---+---+---+---+---+
+ |   |   |###|   |   |    |   |   |###|???|   |    |   |#?#|###|###|###|
+ +---+---+---+---+---+    +---+---+---+---+---+    +---+---+---+---+---+
+ |   |   |   |   |   |    |   |   |???|   |   |    |   |   |#?#|###|###|
+ +---+---+---+---+---+    +---+---+---+---+---+    +---+---+---+---+---+
+         fig.1                    fig.2                    fig.3
+
+ Now you know how checking works so I can explain that strange bug.  We played
+ and sometimes one of us collided, but we did'n see where.  He simply stopped
+ in free place.  No other cerv or edge where to collide.  After some time
+ I found where I did a mistake.  Imagine a situation as in fig.3, you are at
+ center of the figure and your angle is a little more than M_PI (between 180
+ and 181 degrees).  Now you start turning left and your angle goes under M_PI.
+ But your rounded position hasn't yet changed.  So now we check those three
+ pixels marked with ?.  And this causes collision.  If we check only when our
+ rounded position changes, this cannot happen.  We do so.
+
+ But there are yet some things that are done during update.  If someone
+ collides, others speeds are increased by 20.  We alse set place numbers for
+ collided cerv's, so we can then figure out who is winner etc.  We check if
+ round is over then.  And if only one cerv left, we collide him to end round.
+
+ So we know who won round, who was second etc.  We use a very simple scoring,
+ no points for three places, nothing difficult.  For a win, you get 1 point.
+ Simple.  But you can win, win and still win and nobody would say that you're
+ still winning.  So for three wins in a line you get HATRICK.  With HATRICK
+ you get additional 3 points. And if you win 7 times more (10 times at all),
+ you get EXTRA HATRICK and 10 point bonus.  These bonuses are written with big
+ bold font in the middle of field with your color so everybody knows that you
+ just got HATRICK.  Only for having a complete description for this, after you
+ got HATRICK, you have 6 points in 3 rounds (+3p) and after getting EXTRA
+ HATRICK you have 23 points in 10 rounds (+3p +10p).  If you're still winning,
+ nothing will happen.  So if you want more points, it is good to lose one
+ round and then get EXTRA HATRICK and repeat it over and over.
+
+
+ == Written by Tomas Janousek, (C) 2003
+
+vim:set tw=78 ai fo=t1:

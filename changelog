@@ -1,0 +1,29 @@
+cervi (0.0.3) unstable; urgency=low
+
+  * Fixed Makefile
+
+ -- Tomas Janousek <tomi@nomi.cz>  Tue, 26 Aug 2003 15:01:09 +0200
+
+cervi (0.0.2) unstable; urgency=low
+
+  * Could not compile on some machines (game.cc line 326, iostream not inc.)
+    (fixed by cervi-0.0.1-01.patch)
+  * Added music
+  * Added placing method from original cervi (now default)
+  * Changed class Field so we can dynamically change its size (I didn't know
+    that vector<bool> acts as bit vector, I thought it is same as vector<int>)
+  * You can choose field size
+  * Added hatrick and extra hatrick bonuses
+  * Written `Gameplay internals' section in README
+  * Rewritten antialiasing (looks really antialiased now :)
+  * Some little code cleanups as usual
+
+ -- Tomas Janousek <tomi@nomi.cz>  Sun, 24 Aug 2003 22:14:12 +0200
+
+cervi (0.0.1) unstable; urgency=low
+
+  * First release which has almost all features that should cervi have (all
+    that I remembered) and which has fixed all bugs which I've found during
+    development.
+
+ -- Tomas Janousek <tomi@nomi.cz>  Mon, 11 Aug 2003 09:47:57 +0200
