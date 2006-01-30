@@ -55,12 +55,11 @@ namespace std {
     // reset to initial state (on new round)
     void Music::reset() {
 	mptr = music;
-	tickstate = 0;
 	speed = 0;
     }
 
     // contructor loads sound files
-    Music::Music() : mptr(music), tickstate(0), speed(100), play(false)
+    Music::Music() : mptr(music), speed(100), play(false)
     {
 	esd = esd_open_sound(0);
 	if (esd < 0) return;

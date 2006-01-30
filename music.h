@@ -23,7 +23,6 @@ namespace std {
 	    int esd;
 	    int tones[ctoneslen];
 	    char *mptr;
-	    unsigned long long int tickstate;
 
 	public:
 	    volatile double speed;
