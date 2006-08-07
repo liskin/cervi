@@ -29,24 +29,24 @@ namespace std {
     unsigned int colors[] = {
 	0xff0000,
 	0x00ff00,
-	0x0000ff,
-	0xffff00,
 	0x00ffff,
 	0xff00ff,
 	0xff8000,
+	0x0000ff,
+	0xffff00,
 	0xffffff
     };
 
     // controls of cerv's
-    struct {
+    static struct {
 	unsigned int left[3], right[3];
     } controls[8] = {
 	{{'N',0,0}, {'M',0,0}},
 	{{'1','!',0}, {'2','@',0}},
 	{{'[','{',0}, {']','}',0}},
+	{{'S',0,0}, {'D',0,0}},
 	{{GDK_KP_1,0,0}, {GDK_KP_2,0,0}},
 	{{GDK_KP_Add,0,0}, {GDK_KP_Subtract,0,0}},
-	{{'S',0,0}, {'D',0,0}},
 	{{0,0,0}, {0,0,0}},
 	{{0,0,0}, {0,0,0}}
     };
@@ -58,7 +58,7 @@ namespace std {
 	n_cervi = ncervi;
 	for (int i=0; i<n_cervi; i++) {
 	    if (par.placing == 0) {
-		double x,y,angle,r;
+		double x,y,angle,r,speed;
 		bool bad = 1;
 		while (bad) {
 		    // place cerv's randomly with some distances between them
@@ -77,15 +77,23 @@ namespace std {
 			    break;
 			}
 		}
-		cervi[i] = new Cerv(this,x,y,angle,
-			70 + (rand() % 50) - 5 * (n_cervi - 2),10,
-			colors[i],i);
+		speed = 70 - 5 * (n_cervi - 2);
+		if (par.speed == 0)
+		    speed += rand() % 50;
+		else
+		    speed += 25;
+		cervi[i] = new Cerv(this,x,y,angle,speed,10,colors[i],i);
 	    } else if (par.placing == 1) {
+		double speed = 70 - 5 * (n_cervi - 2);
+		if (par.speed == 0)
+		    speed += rand() % 50;
+		else
+		    speed += 25;
+
 		cervi[i] = new Cerv(this,field.width / 2,field.height / 2,
 			-M_PI_2 + i*2*M_PI/n_cervi +//position cerv's regularly
 			2*M_PI*((rand()%20)-10)/n_cervi/100, // with variation
-			70 + (rand() % 50) - 5 * (n_cervi - 2),10,
-			colors[i],i);//variate speed also
+			speed,10,colors[i],i);
 		cervi[i]->_cspeed = cervi[i]->_speed;
 		cervi[i]->update(75*(n_cervi+2)/2); // keep similar distance
 		// between cerv's for any number of cerv's

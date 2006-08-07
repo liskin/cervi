@@ -38,7 +38,7 @@ GtkWidget *score[8]; // labels for score
 int  score_n[8] = { 0,0,0,0,0,0,0,0 }; // score counters
 char score_s[8][14] = { "-","-","-","-","-","-","-","-" }; // temps for score
 int n_cervi = 2; // number of cerv's
-GameParam gpar = { placing: 0, width: defwidth, height: defheight };
+GameParam gpar = { placing: 0, width: defwidth, height: defheight, speed: 0 };
     // game parameters for next round
 int newwidth = defwidth, newheight = defheight;
     // will change field size after round
@@ -47,7 +47,7 @@ int medfontheight = 0; // medfont - height of text "GNU Iy" + 3
 int lastwin = -1, lastwins = 0; // hatrick counter
 
 // field sizes
-struct {
+static struct {
     int width, height;
 } sizes[] = {
     {defwidth,defheight},
@@ -62,8 +62,10 @@ int draw(void *area);
 void newround();
 void newgame(gpointer, gpointer n);
 void chplacing(gpointer, gpointer n);
+void chspeed(gpointer, gpointer n);
 void updatefsize();
 void chfsize(gpointer, gpointer n);
+void chmusic(gpointer, gpointer n);
 void about();
 void quit();
 
@@ -87,6 +89,10 @@ GtkItemFactoryEntry menu_items[] = {
  { "/Options/Look from center",	NULL,	 A chplacing,	1,
      "/Options/Look at center"},
  { "/Options/sep1",		NULL,	    	NULL,	0, "<Separator>" },
+ { "/Options/Random speed",	NULL,	 A chspeed,	0, "<RadioItem>"},
+ { "/Options/Equal speed",	NULL,	 A chspeed,	1,
+     "/Options/Random speed"},
+ { "/Options/sep2",		NULL,	    	NULL,	0, "<Separator>" },
  { "/Options/Field 600x410",	NULL,	 A chfsize,	0, "<RadioItem>"},
  { "/Options/Field 780x530",	NULL,	 A chfsize,	1,
      "/Options/Field 600x410"},
@@ -96,6 +102,8 @@ GtkItemFactoryEntry menu_items[] = {
      "/Options/Field 600x410"},
  { "/Options/Field 1580x1100",	NULL,	 A chfsize,	4,
      "/Options/Field 600x410"},
+ { "/Options/sep3",		NULL,	    	NULL,	0, "<Separator>" },
+ { "/Options/Mute music",	NULL,	 A chmusic,	0, "<ToggleItem>"},
  { "/_Help",			NULL,		NULL,	0, "<LastBranch>" },
  { "/_Help/_About...",		NULL,	       about,	0, NULL }
 };
@@ -298,6 +306,12 @@ void chplacing(gpointer, gpointer n)
     gpar.placing = (int)n;
 }
 
+// change speed mode
+void chspeed(gpointer, gpointer n)
+{
+    gpar.speed = (int)n;
+}
+
 // do everything for changing field size
 void updatefsize()
 {
@@ -316,6 +330,11 @@ void chfsize(gpointer, gpointer n)
     newwidth = sizes[(int)n].width;
     newheight = sizes[(int)n].height;
     updatefsize();
+}
+
+void chmusic(gpointer, gpointer n)
+{
+    m.playmusic = !m.playmusic;
 }
 
 // create backing pixmap (and show about)

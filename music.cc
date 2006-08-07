@@ -59,7 +59,7 @@ namespace std {
     }
 
     // contructor loads sound files
-    Music::Music() : mptr(music), speed(100), play(false)
+    Music::Music() : mptr(music), speed(100), play(false), playmusic(true)
     {
 	esd = esd_open_sound(0);
 	if (esd < 0) return;
@@ -86,7 +86,7 @@ namespace std {
     void Music::thread()
     {
 	while (1) {
-	    if (play) {
+	    if (play && playmusic) {
 		bool mstart = false;
 
 		if (*mptr != '-' && (*mptr - 0x30) >= 0)

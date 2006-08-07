@@ -21,6 +21,7 @@ namespace std {
     struct GameParam {
 	int placing;
 	int width, height;
+	int speed;
     };
 
     class Game {

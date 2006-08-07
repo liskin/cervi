@@ -7,7 +7,7 @@
 # This you may want to change
 RELEASE=no
 DEBUG=no
-prefix=/usr
+prefix=/opt/cervi
 incdir=$(prefix)/include
 bindir=$(prefix)/bin
 datadir=$(prefix)/share/cervi
@@ -31,7 +31,7 @@ LDLIBS=-lm $(shell gtk-config --libs) $(shell pkg-config --libs esound) \
 LINK.o=$(CXX) $(LDFLAGS) $(TARGET_ARCH)
 MAIN=cervi
 INSTALL=install -c -m 644
-INSTALL_BIN=install -c -m 755
+INSTALL_BIN=install -c -m 755 -D
 
 ifeq ($(RELEASE),yes)
  CFLAGS += -O2
@@ -65,7 +65,7 @@ DEBUG: clean
 RELEASE: clean
 	$(MAKE) RELEASE=yes
 install: all install-music
-	$(INSTALL_BIN) $(MAIN) $(bindir)
+	$(INSTALL_BIN) $(MAIN) $(bindir)/$(MAIN)
 install-music: all-music
 	$(MAKE) -C music install
 

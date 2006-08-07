@@ -27,6 +27,7 @@ namespace std {
 	public:
 	    volatile double speed;
 	    volatile bool play;
+	    volatile bool playmusic;
 
 	    Music();
 	    ~Music();
