@@ -18,6 +18,7 @@
 #include <unistd.h>
 #include <pthread.h>
 #include <signal.h>
+#include <stdint.h>
 #include "field.h"
 #include "game.h"
 #include "music.h"
@@ -287,7 +288,7 @@ void newgame(gpointer, gpointer n)
 {
     if (game)
 	startstop(drawing_area);
-    n_cervi = (int)n;
+    n_cervi = (intptr_t) n;
     for (int i=0; i<8; score_n[i++] = 0);
     update_status(n_cervi,-1);
 
@@ -303,13 +304,13 @@ void newgame(gpointer, gpointer n)
 // change placing
 void chplacing(gpointer, gpointer n)
 {
-    gpar.placing = (int)n;
+    gpar.placing = (intptr_t) n;
 }
 
 // change speed mode
 void chspeed(gpointer, gpointer n)
 {
-    gpar.speed = (int)n;
+    gpar.speed = (intptr_t) n;
 }
 
 // do everything for changing field size
@@ -327,8 +328,8 @@ void updatefsize()
 // change field size
 void chfsize(gpointer, gpointer n)
 {
-    newwidth = sizes[(int)n].width;
-    newheight = sizes[(int)n].height;
+    newwidth = sizes[(intptr_t) n].width;
+    newheight = sizes[(intptr_t) n].height;
     updatefsize();
 }
 
