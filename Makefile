@@ -18,10 +18,12 @@ sysconfdir=/etc
 export
 VERSION=0.0.4
 PACKAGE=cervi
-CFLAGS=-Wall -D_GNU_SOURCE -D_REENTRANT -DVERSION=\"$(VERSION)\" \
+CFLAGS=
+CXXFLAGS=
+CFLAGS+=-Wall -D_GNU_SOURCE -D_REENTRANT -DVERSION=\"$(VERSION)\" \
        $(shell gtk-config --cflags) $(shell pkg-config --cflags esound) \
        -DDATADIR=\"$(datadir)\"
-CXXFLAGS=-Wall -D_GNU_SOURCE -D_REENTRANT -DVERSION=\"$(VERSION)\" \
+CXXFLAGS+=-Wall -D_GNU_SOURCE -D_REENTRANT -DVERSION=\"$(VERSION)\" \
 	 $(shell gtk-config --cflags) $(shell pkg-config --cflags esound) \
 	 -DDATADIR=\"$(datadir)\"
 CPPFLAGS=
@@ -65,7 +67,7 @@ DEBUG: clean
 RELEASE: clean
 	$(MAKE) RELEASE=yes
 install: all install-music
-	$(INSTALL_BIN) $(MAIN) $(bindir)/$(MAIN)
+	$(INSTALL_BIN) $(MAIN) $(DESTDIR)/$(bindir)/$(MAIN)
 install-music: all-music
 	$(MAKE) -C music install
 

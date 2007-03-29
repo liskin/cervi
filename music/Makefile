@@ -12,8 +12,8 @@ all: $(WAVS)
 clean:
 	$(RM) *.wav
 install: dep-check $(WAVS)
-	mkdir -p $(datadir)
-	$(INSTALL) $(WAVS) $(datadir)/
+	mkdir -p $(DESTDIR)/$(datadir)
+	$(INSTALL) $(WAVS) $(DESTDIR)/$(datadir)/
 %.wav: %.mid
 	timidity -Ow1slM -A 200 -o $@ $< >/dev/null
 
