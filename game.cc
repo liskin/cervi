@@ -9,6 +9,7 @@
 #pragma implementation
 
 #include <iostream>
+#include <cstdlib>
 #include <cmath>
 #include <gdk/gdkkeysyms.h>
 #include "game.h"
