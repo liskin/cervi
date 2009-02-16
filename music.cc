@@ -24,7 +24,7 @@ extern unsigned long long int ticks();
 
 namespace std {
     // array of tone filenames (and esd sample names)
-    char *ctones[] = {
+    const char *ctones[] = {
 	DATADIR "/g.wav",     // 0
 	DATADIR "/a.wav",     // 1
 	DATADIR "/h.wav",     // 2
