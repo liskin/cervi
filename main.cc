@@ -291,6 +291,7 @@ void newgame(gpointer, gpointer n)
     n_cervi = (intptr_t) n;
     for (int i=0; i<8; score_n[i++] = 0);
     update_status(n_cervi,-1);
+    lastwin = -1; lastwins = 0; // reset the hatrick counter
 
     gdk_draw_rectangle(pixmap,drawing_area->style->black_gc,1,0,0,
 	    drawing_area->allocation.width,
