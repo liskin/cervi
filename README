@@ -28,18 +28,20 @@
   Controls
  ==========
 
- Controls for 5th - 8th player aren't yet defined and there is no way to set
- them without altering source code (game.cc line 38).  We will try to define
+ Controls for 7th - 8th player aren't yet defined and there is no way to set
+ them without altering source code (game.cc line 45).  We will try to define
  them so game will be playable in good number of players on desktop and on
  notebook (on most notebooks you can connect 2nd keyboard and then it will
- be very playable).  Here is a list of controls for 1st - 4th player:
+ be very playable).  Here is a list of controls for 1st - 6th player:
 
      Turn left | Turn right
    ------------+-------------
- 1. left arrow | right arrow
- 2.        'V' | 'B'
- 3. left shift | 'Z' ('Y' on qwertz keyboard)
- 4.    ',' '<' | '.' '>'
+ 1.        'N' | 'M'
+ 2.    '!' '1' | '2' '@'
+ 3.    '[' '{' | '}' ']'
+ 4.        'S' | 'D'
+ 5.   numpad 1 | numpad 2
+ 6.   numpad + | numpad -
 
 
   Compiling and installing
