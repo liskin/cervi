@@ -1,3 +1,9 @@
+cervi (0.0.4) unstable; urgency=low
+
+  * Controls, compilation fixes, Makefile fixes, other fixes. See git log.
+
+ -- Tomas Janousek <tomi@nomi.cz>  Thu, 15 Mar 2012 19:26:58 +0100
+
 cervi (0.0.3) unstable; urgency=low
 
   * Fixed Makefile
